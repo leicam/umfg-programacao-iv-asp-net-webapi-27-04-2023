@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Umfg.Apresentacao.Entities;
+using Umfg.Apresentacao.Exceptions;
+using Umfg.Apresentacao.Interfaces;
 
 namespace Umfg.Apresentacao.Controllers
 {
@@ -7,26 +8,34 @@ namespace Umfg.Apresentacao.Controllers
     [Route("umfg/api/v1/produto")]
     public sealed class ProdutoController : ControllerBase
     {
-        private List<Produto> _lista = new List<Produto>()
+        private readonly IProdutoServico _service;
+
+        public ProdutoController(IProdutoServico service)
         {
-            new Produto()
-            {
-                CodigoBarra = "10000001",
-                Decricao = "Coca-Cola 350ml",
-                Valor = 4.99m,
-            },
-        };
+            _service = service;
+        }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_lista.AsEnumerable());
+            return Ok(_service.ObterTodos());
         }
 
         [HttpGet("{codigoBarra}")]
         public IActionResult Get(string codigoBarra)
         {
-            return Ok(_lista.FirstOrDefault(x => x.CodigoBarra == codigoBarra));
+            try
+            {
+                return Ok(_service.ObterPorCodigoBarra(codigoBarra));
+            }
+            catch (NotFoundException)
+            {
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

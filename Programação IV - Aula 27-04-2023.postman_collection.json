@@ -1,0 +1,25 @@
+{
+	"info": {
+		"_postman_id": "03aaed75-2f59-4586-9b86-f09e8799dc50",
+		"name": "Programação IV - Aula 27/04/2023",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Buscar todos os produtos",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar produto por código de barras",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

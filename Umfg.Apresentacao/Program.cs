@@ -1,6 +1,10 @@
 using Microsoft.OpenApi.Models;
+using SimpleInjector;
+using Umfg.Apresentacao.Interfaces;
+using Umfg.Apresentacao.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+var container = new Container();
 
 // Add services to the container.
 
@@ -16,7 +20,17 @@ builder.Services.AddSwaggerGen(x =>
     });
 });
 
+builder.Services.AddSimpleInjector(container, options =>
+{
+    options.AddAspNetCore().AddControllerActivation();
+});
+
+container.Register<IProdutoServico, ProdutoServico>(Lifestyle.Scoped);
+
 var app = builder.Build();
+
+app.Services.UseSimpleInjector(container);
+container.Verify();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
